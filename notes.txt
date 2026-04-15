@@ -1,0 +1,3 @@
+yf.download() → always gives you price history
+yf.Ticker().financials → gives you financial statements
+yf.Ticker().info → gives you general information
