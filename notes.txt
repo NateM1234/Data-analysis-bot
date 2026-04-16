@@ -1,3 +1,17 @@
 yf.download() → always gives you price history
 yf.Ticker().financials → gives you financial statements
 yf.Ticker().info → gives you general information
+
+
+
+def market_recommendations():
+    msft = yf.Ticker("MSFT")
+    hist = msft.history(period="1mo")
+    rint(msft.recommendations)
+
+
+def information on stock():
+    msft = yf.Ticker('msft')
+    stockinfo = msft.info
+    for key,value in stockinfo.items():
+        print(key, ":", value)
