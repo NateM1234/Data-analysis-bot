@@ -1,27 +1,38 @@
 import yfinance as yf
-import pandas as pd
-from datetime import datetime
+
 from data.fetcher import fetch_user_data, clean_data
-from analysis.indicators import add_indicators, generate_signals, apply_stop_loss, position_sizing
+from analysis.indicators import (
+    add_indicators,
+    generate_signals,
+    apply_stop_loss,
+    position_sizing
+)
 from analysis.advice import generate_advice
 
-ticker = input("Input ticker (e.g. MSFT): ")
+
+# MAIN PROGRAM
+
+ticker = input("Input ticker (e.g. MSFT): ").upper()
+
+# Data pipeline
 raw = fetch_user_data(ticker)
 clean = clean_data(raw)
-data = add_indicators(clean)
-data = generate_signals(data)
-
-
-ti = yf.Ticker(ticker)
-news = ti.news()
-
-
-
-values = generate_advice(data, ticker)
-
 
 if clean is not None:
-    print(ticker)
+
+    data = add_indicators(clean)
+    data = generate_signals(data)
+
+    # Fetch news
+    ti = yf.Ticker(ticker)
+    news = ti.news
+
+    # Generate advice dictionary
+    values = generate_advice(data, ticker)
+
+    # TERMINAL REPORT
+    
+
     print("\n===============================================================")
     print("                     QUANT TRADING REPORT")
     print("===============================================================")
@@ -29,17 +40,29 @@ if clean is not None:
     print(f"Ticker:              {values['ticker']}")
     print(f"Current Price:       ${values['price']:.2f}")
     print(f"Signal:              {values['signal']}")
-    
 
     print("\n--- Market Analysis ---")
     print(f"Trend Advice:        {values['trend_advice']}")
     print(f"Volatility Advice:   {values['volatility_advice']}")
     print(f"RSI Advice:          {values['rsi_advice']}")
 
+    # NEWS SECTION
 
-    print(f"News:                {news}")
+    print("\n--- Latest News ---")
 
-    print("==============================\n")
+    if news and len(news) > 0:
+
+        for article in news[:5]:
+            title = article.get('content', {}).get('title', 'No title available')
+            print(f"- {title}")
+
+    else:
+        print("No recent news found.")
+
+    print("\n===============================================================\n")
+
+else:
+    print("Failed to fetch or clean stock data.")
 
 
 
