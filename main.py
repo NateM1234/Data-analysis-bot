@@ -1,5 +1,7 @@
 import yfinance as yf
+import matplotlib.pyplot as plt
 
+from visualisation.charts import plot_charts
 from data.fetcher import fetch_user_data, clean_data
 from analysis.indicators import (
     add_indicators,
@@ -30,12 +32,8 @@ if clean is not None:
     # Generate advice dictionary
     values = generate_advice(data, ticker)
 
-    # TERMINAL REPORT
     
-
-    print("\n===============================================================")
-    print("                     QUANT TRADING REPORT")
-    print("===============================================================")
+    print("TERMINAL REPORT")
 
     print(f"Ticker:              {values['ticker']}")
     print(f"Current Price:       ${values['price']:.2f}")
@@ -46,7 +44,6 @@ if clean is not None:
     print(f"Volatility Advice:   {values['volatility_advice']}")
     print(f"RSI Advice:          {values['rsi_advice']}")
 
-    # NEWS SECTION
 
     print("\n--- Latest News ---")
 
@@ -59,7 +56,8 @@ if clean is not None:
     else:
         print("No recent news found.")
 
-    print("\n===============================================================\n")
+    plot_charts(data, ticker)
+
 
 else:
     print("Failed to fetch or clean stock data.")

@@ -18,11 +18,9 @@ def add_indicators(data):
     rs = avg_gain / avg_loss
     data['RSI'] = 100 - (100/ (1 + rs))
 
-    #volume
     data['Volume_MA20'] = data['Volume'].rolling(20).mean()
 
 
-    #volatility
     daily_return = data['Close'].pct_change()
     data['Volatility'] = daily_return.rolling(20).std() * (252 ** 0.5)
     data['Volatility_MA30'] = data['Volatility'].rolling(30).mean()
@@ -35,6 +33,7 @@ def generate_signals(data):
     
     data['Signal'] = 'hold'    
     for i in range(len(data)):
+        
         if (
             data['RSI'].iloc[i] < 60 and 
             data['RSI'].iloc[i] > 40 and 
